@@ -1,32 +1,42 @@
-import React, {createContext, useReducer, useContext} from 'react';
+import React, {createContext, useReducer, useContext} from "react";
 
-//Setting initial state.
-const initialState = {};
+//Initial state with removedTours as an empty array
+const initialState = {
+  removedTours: [],
+};
 
-//Create context.
-const generalContext = createContext(initialState);
+//Create context
+const GeneralContext = createContext(initialState);
 
-//State reducer.
+//State reducer
 const reducer = (state, action) => {
   switch (action.type) {
-    //No content here yet
+    case "REMOVE_TOUR":
+      return {
+        ...state,
+        removedTours: [...state.removedTours, action.payload],
+      };
+    case "RESET_TOURS":
+      return {
+        ...state,
+        removedTours: [],
+      };
     default:
       return state;
   }
 };
 
-// Context provider component
-const StateProvider = ({ children }) => {
+//Context provider component
+const StateProvider = ({children}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <generalContext.Provider value={{ state, dispatch }}>
+    <GeneralContext.Provider value={{ state, dispatch }}>
       {children}
-    </generalContext.Provider>
+    </GeneralContext.Provider>
   );
 };
 
-//Defines context updater
-const updateContext = () => useContext(generalContext);
+//Hook for accessing state and dispatch
+const useGlobalContext = () => useContext(GeneralContext);
 
-// Exporting StateProvider and useUpdateContext.
-export {StateProvider, updateContext};
+export {StateProvider, useGlobalContext};
