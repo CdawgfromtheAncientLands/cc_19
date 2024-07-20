@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React,{useState,useEffect} from "react";
 import {useGlobalContext} from "../context/global-context";
 
 //Data fetcher with error and loading handling
-const fetchTours = async (setTours, setLoading, setError) => {
+const fetchTours = async (setTours,setLoading,setError) => {
   try {
     const response = await fetch("/react-tours-project"); //Proxy setup for CORS
     if (!response.ok) {
@@ -19,36 +19,39 @@ const fetchTours = async (setTours, setLoading, setError) => {
 
 //Defining exportables
 const Gallery = () => {
-  const { state, dispatch } = useGlobalContext(); 
+  const {state,dispatch} = useGlobalContext();
 
   //Tour data state
-  const [tours, setTours] = useState([]);
-  
+  const [tours,setTours] = useState([]);
+  const [filteredTours,setFilteredTours] = useState([]);
+
   //State for loading and error handling
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading,setLoading] = useState(true);
+  const [error,setError] = useState(null);
 
   //Fetch tours data on component mount
   useEffect(() => {
-    fetchTours(setTours, setLoading, setError);
-  }, []);
+    fetchTours(setTours,setLoading,setError);
+  },[]);
 
   //Filter out removed tours
   useEffect(() => {
     if (tours.length > 0) {
-      setTours(tours.filter(tour => !state.removedTours.includes(tour.id)));
+      setFilteredTours(tours.filter(tour => !state.removedTours.includes(tour.id)));
     }
-  }, [tours, state.removedTours]);
+  },[tours,state.removedTours]);
 
   //Function for removing tours from view
   const removeTour = (id) => {
-    dispatch({type: "REMOVE_TOUR", payload: id});
-    setTours(tours.filter(tour => tour.id !== id));
+    dispatch({type:"REMOVE_TOUR",payload:id});
+    setFilteredTours(filteredTours.filter(tour => tour.id !== id)); //Update filteredTours directly
   };
 
   //Toggle info visibility
   const toggleReadMore = (id) => {
-    setTours(tours.map(tour => tour.id === id ? {...tour, showMore: !tour.showMore} : tour));
+    setFilteredTours(filteredTours.map(tour =>
+      tour.id === id ? {...tour,showMore:!tour.showMore} : tour
+    ));
   };
 
   //Render loading and error states
@@ -60,7 +63,7 @@ const Gallery = () => {
   }
 
   //Render when no tours are available
-  if (tours.length === 0) {
+  if (filteredTours.length === 0) {
     return (
       <div>
         <h2>No tours left</h2>
@@ -72,8 +75,8 @@ const Gallery = () => {
   //Tour rendering
   return (
     <section>
-      {tours.map((tour) => {
-        const { id, name, info, image, price, showMore } = tour;
+      {filteredTours.map((tour) => {
+        const {id,name,info,image,price,showMore} = tour;
         return (
           <article key={id} className="single-tour">
             <img src={image} alt={name} />
@@ -83,7 +86,7 @@ const Gallery = () => {
                 <h4 className="tour-price">${price}</h4>
               </div>
               <p>
-                {showMore ? info : `${info.substring(0, 200)}...`}
+                {showMore ? info : `${info.substring(0,200)}...`}
                 <button onClick={() => toggleReadMore(id)}>
                   {showMore ? "Show Less" : "Read More"}
                 </button>

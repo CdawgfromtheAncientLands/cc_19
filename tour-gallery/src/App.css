@@ -1,28 +1,65 @@
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background-color: #fff;
-    color: #000;
-  }
-  
-  nav {
-    padding: 10px;
-    background-color: #f0f0f0;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin: 10px 0;
-  }
-  
-  a {
-    text-decoration: none;
-    color: blue;
-  }
-  
-  a:hover {
-    color: darkblue;
-  }
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+nav {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+
+a:hover {
+  color: darkblue;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.single-tour {
+  border: 2px solid orange;
+  width: 700px;
+  height: 900px;
+  margin: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.single-tour img {
+  max-width: 600px;
+  max-height: 600px;
+  width: 100%;
+  height: auto;
+  border-bottom: 2px solid orange;
+}
+
+.tour-info {
+  margin: 0;
+  padding: 10px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100% - 60px);
+}
